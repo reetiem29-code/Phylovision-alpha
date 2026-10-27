@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from Bio import SeqIO, AlignIO, Phylo
+from Bio import SeqIO, AlignIO, Phylo, Entrez
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -42,6 +42,17 @@ div.stButton > button:hover, div.stDownloadButton > button:hover { border-color:
 [data-testid="stDataFrame"] { border:1px solid rgba(151,178,150,.18); border-radius:10px; overflow:hidden; }
 hr { border-color:#34413c; }
 footer {visibility:hidden;}
+[data-testid="stSidebar"] { min-width: 285px; }
+[data-testid="stSidebar"] .block-container { padding-top:1.1rem; }
+.pv-side-label { color:#a8c3a0; font-size:.67rem; letter-spacing:.15em; font-weight:800; margin:.35rem 0 .35rem; }
+.pv-side-divider { border-top:1px solid rgba(168,195,160,.19); margin:1rem 0 .8rem; }
+.pv-step-hint { color:#9daaa0; font-size:.72rem; line-height:1.35; padding:0 .35rem .42rem 1.55rem; }
+.pv-readiness { color:#d5dfd2; font-size:.82rem; line-height:1.9; }
+[data-testid="stSidebar"] div.stButton > button { text-align:left; min-height:2.2rem; padding:.35rem .7rem; border-color:rgba(168,195,160,.18); background:rgba(255,255,255,.025); color:#e9eee2; font-weight:600; }
+[data-testid="stSidebar"] div.stButton > button[kind="primary"] { background:rgba(168,195,160,.18); border-color:#8eaa88; color:#f4f5ec; }
+[data-testid="stSidebar"] div.stButton > button:hover { background:rgba(168,195,160,.13); border-color:#8eaa88; }
+[data-testid="stSidebar"] [data-testid="stTextInput"] input { font-size:.84rem; }
+
 </style>
 ''', unsafe_allow_html=True)
 
@@ -60,13 +71,83 @@ with h2:
     st.markdown('<div class="pv-kicker">From Sequences to Evolution</div><div style="font-size:1.55rem;font-weight:700;color:#f7f4ff;font-family:Manrope">Biological relationships, with room to breathe.</div><div class="pv-muted">A calm, precise workspace for sequence comparison and evolutionary exploration.</div>', unsafe_allow_html=True)
 st.markdown('')
 
+# Guided workflow and compact direct-access tool dock. Streamlit provides the native
+# sidebar collapse/expand control, so this remains responsive without custom JS.
+PAGE_GROUPS = {
+    'Start here': ['Home', 'Sequence Input', 'Accession → FASTA'],
+    'Analyze': ['Alignment Explorer', 'Phylogenetic Tree'],
+    'Explore results': ['Sequence Similarity', 'Evolution Lens', 'Understand My Tree'],
+    'Learn & about': ['Creators & About'],
+}
+ALL_PAGES = [p for group in PAGE_GROUPS.values() for p in group]
+PAGE_HINTS = {
+    'Home': 'Overview and guided start', 'Sequence Input': 'Paste, upload, or load demo FASTA',
+    'Accession → FASTA': 'Fetch records from NCBI accession codes',
+    'Alignment Explorer': 'Inspect aligned positions and differences',
+    'Phylogenetic Tree': 'Build a tree with NJ or UPGMA',
+    'Sequence Similarity': 'Compare pairwise sequence identity',
+    'Evolution Lens': 'Explore evolutionary patterns', 'Understand My Tree': 'Interpret your tree in plain language',
+    'Creators & About': 'Project credits and methodology',
+}
+# Initialize analysis state before drawing the sidebar so readiness is accurate on first load.
+if 'fasta_text' not in st.session_state: st.session_state.fasta_text = DEMO_FASTA
+if 'tree' not in st.session_state: st.session_state.tree = None
+if 'aligned_records' not in st.session_state: st.session_state.aligned_records = None
+if 'dist_df' not in st.session_state: st.session_state.dist_df = None
+if 'tree_method' not in st.session_state: st.session_state.tree_method = 'Neighbor Joining'
+if 'sequence_type' not in st.session_state: st.session_state.sequence_type = 'DNA'
+if 'bootstrap_support' not in st.session_state: st.session_state.bootstrap_support = {}
+if 'tree_signature' not in st.session_state: st.session_state.tree_signature = None
+if 'fetched_fasta_text' not in st.session_state: st.session_state.fetched_fasta_text = ''
+if 'fetch_results' not in st.session_state: st.session_state.fetch_results = []
+if 'page' not in st.session_state:
+    st.session_state.page = 'Home'
+
 with st.sidebar:
-    st.markdown('<div style="font-family:Manrope;font-size:1.28rem;font-weight:800;letter-spacing:-.03em">✳ PhyloVision</div><div style="color:#a8c3a0;font-size:.69rem;letter-spacing:.15em;font-weight:700;margin:.2rem 0 1.1rem">BOTANICAL BIOINFORMATICS</div>', unsafe_allow_html=True)
-    nav_group = st.radio('Workspace', ['Start here', 'Analyze', 'Explore results', 'Learn & about'], key='nav_group')
-    nav_options = {'Start here':['Home','Sequence Input'], 'Analyze':['Alignment Explorer','Phylogenetic Tree'], 'Explore results':['Sequence Similarity','Evolution Lens','Understand My Tree'], 'Learn & about':['Creators & About']}
-    page = st.radio('Choose a tool', nav_options[nav_group], key='nav_'+nav_group)
-    st.markdown('<div style="border-top:1px solid #34423c;margin:1rem 0"></div><div style="color:#a8c3a0;font-size:.72rem;font-weight:700;letter-spacing:.12em">SUGGESTED FLOW</div><div style="font-size:.84rem;line-height:1.9;color:#d0d8ce;margin-top:.45rem">01 &nbsp; Input sequences<br>02 &nbsp; Check alignment<br>03 &nbsp; Build a tree<br>04 &nbsp; Explore similarity</div>', unsafe_allow_html=True)
-    st.markdown('<div style="margin-top:1.1rem;color:#91a096;font-size:.75rem;line-height:1.5">Educational analysis · Results depend on input quality and method.</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-family:Manrope,sans-serif;font-size:1.28rem;font-weight:800;letter-spacing:-.035em">✳ PhyloVision</div><div style="color:#a8c3a0;font-size:.68rem;letter-spacing:.15em;font-weight:700;margin:.15rem 0 .9rem">BOTANICAL BIOINFORMATICS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-side-label">QUICK ACTION SEARCH</div>', unsafe_allow_html=True)
+    search_query = st.text_input('Search tools', placeholder='Find a tool or action…', label_visibility='collapsed', key='quick_action_search')
+    if search_query.strip():
+        matches = [name for name in ALL_PAGES if search_query.lower() in name.lower() or search_query.lower() in PAGE_HINTS[name].lower()]
+        if matches:
+            chosen_match = st.selectbox('Matching actions', matches, label_visibility='collapsed', key='quick_action_match')
+            if st.button('Open selected tool →', use_container_width=True, key='open_quick_action'):
+                st.session_state.page = chosen_match
+                st.rerun()
+        else:
+            st.caption('No matching tool. Try “tree”, “FASTA”, “similarity”, or “alignment”.')
+    st.markdown('<div class="pv-side-divider"></div><div class="pv-side-label">GUIDED LAB</div><div class="pv-muted" style="font-size:.82rem;margin:.25rem 0 .65rem">Follow the steps in order, or jump ahead whenever you are ready.</div>', unsafe_allow_html=True)
+    guided_steps = [
+        ('1 · Prepare sequences', 'Sequence Input', 'Paste, upload, or load demo data'),
+        ('2 · Fetch by accession', 'Accession → FASTA', 'Optional: retrieve records from NCBI'),
+        ('3 · Inspect alignment', 'Alignment Explorer', 'Check lengths, gaps, and positions'),
+        ('4 · Build a tree', 'Phylogenetic Tree', 'Infer relationships from aligned data'),
+        ('5 · Explore findings', 'Sequence Similarity', 'Compare and interpret results'),
+    ]
+    for label, target, hint in guided_steps:
+        active = st.session_state.page == target
+        if st.button(('●  ' if active else '○  ') + label, key='guided_'+target, use_container_width=True, help=hint, type='primary' if active else 'secondary'):
+            st.session_state.page = target
+            st.rerun()
+        st.markdown(f'<div class="pv-step-hint">{hint}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-side-divider"></div><div class="pv-side-label">TOOL DOCK · DIRECT ACCESS</div>', unsafe_allow_html=True)
+    dock_pages = ['Home', 'Sequence Input', 'Accession → FASTA', 'Alignment Explorer', 'Phylogenetic Tree', 'Sequence Similarity', 'Evolution Lens', 'Understand My Tree', 'Creators & About']
+    dock_choice = st.selectbox('Open a tool directly', dock_pages, index=dock_pages.index(st.session_state.page) if st.session_state.page in dock_pages else 0, label_visibility='collapsed', key='tool_dock_select')
+    if st.button('Go to tool ↗', use_container_width=True, key='tool_dock_go'):
+        st.session_state.page = dock_choice
+        st.rerun()
+
+    # Evidence-based readiness: only count milestones that can be verified from current state.
+    has_input = bool(st.session_state.get('fasta_text', '').strip())
+    has_alignment = st.session_state.get('aligned_records') is not None
+    has_tree = st.session_state.get('tree') is not None
+    done = sum([has_input, has_alignment, has_tree])
+    st.markdown('<div class="pv-side-divider"></div><div class="pv-side-label">LAB READINESS</div>', unsafe_allow_html=True)
+    st.progress(done / 3, text=f'{done}/3 core milestones')
+    st.markdown(f'<div class="pv-readiness">{"✓" if has_input else "○"} Sequence input<br>{"✓" if has_alignment else "○"} Alignment available<br>{"✓" if has_tree else "○"} Tree built</div><div class="pv-step-hint">Readiness reflects this session’s actual state; it does not certify biological validity.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-side-divider"></div><div class="pv-muted" style="font-size:.75rem">Educational analysis · Interpret results in light of sequence quality and method.</div>', unsafe_allow_html=True)
+
+page = st.session_state.page
 
 if 'fasta_text' not in st.session_state: st.session_state.fasta_text = DEMO_FASTA
 if 'tree' not in st.session_state: st.session_state.tree = None
@@ -76,6 +157,8 @@ if 'tree_method' not in st.session_state: st.session_state.tree_method = 'Neighb
 if 'sequence_type' not in st.session_state: st.session_state.sequence_type = 'DNA'
 if 'bootstrap_support' not in st.session_state: st.session_state.bootstrap_support = {}
 if 'tree_signature' not in st.session_state: st.session_state.tree_signature = None
+if 'fetched_fasta_text' not in st.session_state: st.session_state.fetched_fasta_text = ''
+if 'fetch_results' not in st.session_state: st.session_state.fetch_results = []
 
 
 def parse_fasta(text):
@@ -394,7 +477,106 @@ if page == 'Home':
     a,b,c=st.columns(3)
     for col,icon,title,desc in [(a,'🧬','Alignment Explorer','Inspect matching positions, differences and gaps.'),(b,'🌿','Understand My Tree','Get a plain-language explanation of the inferred tree.'),(c,'▦','Sequence Similarity','Compare pairwise sequence identity in a heatmap and table.')]:
         with col: st.markdown(f'<div class="pv-card" style="min-height:155px"><div style="font-size:1.5rem">{icon}</div><div class="pv-section">{title}</div><div class="pv-muted">{desc}</div></div>',unsafe_allow_html=True)
-    st.markdown('<div class="pv-card"><div class="pv-section">Quick start</div><ol><li>Open <b>Sequence Input</b> and upload or paste FASTA records.</li><li>Choose DNA or protein and review any validation messages.</li><li>Open <b>Alignment Explorer</b> to inspect sequence positions.</li><li>Choose <b>Phylogenetic Tree</b> and build the tree.</li><li>Use <b>Understand My Tree</b> and <b>Sequence Similarity</b> to interpret the output.</li></ol><div class="pv-muted">The included sample sequences are illustrative teaching data, not verified reference sequences.</div></div>',unsafe_allow_html=True)
+    st.markdown('<div class="pv-card"><div class="pv-section">Your guided lab</div><div class="pv-muted">Use the numbered <b>Guided Lab</b> steps in the sidebar if you are new to phylogenetics. Prefer to work your own way? The separate <b>Tool Dock</b> gives direct access to every module, and Quick Action Search finds tools by name or task.</div><ol><li><b>Prepare:</b> upload, paste, or fetch FASTA records.</li><li><b>Inspect:</b> confirm sequences are valid and aligned before tree building.</li><li><b>Analyze:</b> construct a phylogenetic tree.</li><li><b>Explore:</b> compare sequence identity and interpret the result.</li></ol><div class="pv-muted">Readiness indicators in the sidebar track available input, alignment, and tree state. Demo sequences are illustrative teaching data, not verified reference sequences.</div></div>',unsafe_allow_html=True)
+
+elif page == 'Accession → FASTA':
+    st.markdown('<div class="pv-title">Accession → FASTA</div><div class="pv-muted">Retrieve real nucleotide or protein records from NCBI by accession code, preview the returned FASTA, and bring it into your existing PhyloVision workflow.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-card"><div class="pv-section">Fetch records from NCBI</div><div class="pv-muted">Enter one accession per line. Choose the database explicitly; an accession by itself does not always tell us whether it represents DNA or protein.</div></div>', unsafe_allow_html=True)
+    db_label = st.radio('NCBI database', ['Nucleotide (DNA/RNA)', 'Protein'], horizontal=True, key='accession_database')
+    db_name = 'nucleotide' if db_label.startswith('Nucleotide') else 'protein'
+    fetched_type = 'DNA' if db_name == 'nucleotide' else 'Protein'
+    accession_text = st.text_area('Accession codes', placeholder='NM_000546.6\nNC_045512.2', height=115, help='Paste accession codes, one per line. Commas and semicolons are also accepted.')
+    contact_email = st.text_input('Contact email (recommended by NCBI)', placeholder='you@example.com', help='Used only to identify requests to NCBI; it is not stored by PhyloVision.')
+    max_accessions = 20
+    accessions = [x.strip() for x in re.split(r'[\n,;\s]+', accession_text) if x.strip()]
+    # Preserve order while removing duplicate accessions.
+    accessions = list(dict.fromkeys(accessions))
+    if accessions:
+        st.caption(f'{len(accessions)} unique accession(s) entered · limit {max_accessions} per request')
+    fetch_col, clear_col = st.columns([1, 1])
+    with fetch_col:
+        fetch_clicked = st.button('Fetch FASTA records', type='primary', use_container_width=True, disabled=not accessions or len(accessions) > max_accessions)
+    with clear_col:
+        if st.button('Clear fetched results', use_container_width=True):
+            st.session_state.fetched_fasta_text = ''
+            st.session_state.fetch_results = []
+            st.rerun()
+    if len(accessions) > max_accessions:
+        st.warning(f'Please fetch no more than {max_accessions} accessions at a time to keep requests manageable.')
+    if fetch_clicked:
+        Entrez.email = contact_email.strip() or None
+        fetched_records = []
+        statuses = []
+        progress = st.progress(0, text='Connecting to NCBI…')
+        for idx, accession in enumerate(accessions):
+            try:
+                with Entrez.efetch(db=db_name, id=accession, rettype='fasta', retmode='text') as handle:
+                    returned = list(SeqIO.parse(handle, 'fasta'))
+                if not returned:
+                    statuses.append({'Accession': accession, 'Status': 'No FASTA record returned', 'Details': 'Check the accession and selected database.'})
+                else:
+                    for record in returned:
+                        record.id = re.sub(r'\s+', '_', record.id.strip())
+                        record.name = record.id
+                        record.description = (record.description or record.id).strip()
+                        record.seq = Seq(str(record.seq).upper().replace(' ', ''))
+                        fetched_records.append(record)
+                    statuses.append({'Accession': accession, 'Status': 'Fetched', 'Details': f'{len(returned)} record(s) returned'})
+            except Exception as exc:
+                message = str(exc).strip().replace('\n', ' ')
+                if len(message) > 220: message = message[:217] + '...'
+                statuses.append({'Accession': accession, 'Status': 'Failed', 'Details': message or 'Network or NCBI request failed.'})
+            progress.progress((idx + 1) / len(accessions), text=f'Processed {idx + 1} of {len(accessions)} accession(s)')
+        progress.empty()
+        if fetched_records:
+            # Avoid duplicate FASTA IDs, because downstream PhyloVision validation requires unique names.
+            seen_ids = {}
+            for rec in fetched_records:
+                original = rec.id
+                seen_ids[original] = seen_ids.get(original, 0) + 1
+                if seen_ids[original] > 1:
+                    rec.id = f'{original}_{seen_ids[original]}'
+                    rec.name = rec.id
+                if rec.description == original:
+                    rec.description = rec.id
+            output = io.StringIO()
+            SeqIO.write(fetched_records, output, 'fasta')
+            st.session_state.fetched_fasta_text = output.getvalue()
+            st.session_state.fetch_results = statuses
+            st.session_state.fetched_sequence_type = fetched_type
+            st.success(f'Fetched {len(fetched_records)} record(s). Review the FASTA below before importing it into the analysis workflow.')
+        else:
+            st.session_state.fetched_fasta_text = ''
+            st.session_state.fetch_results = statuses
+            st.error('No records were fetched. Check the accession codes, selected NCBI database, and network connection.')
+    if st.session_state.fetch_results:
+        st.markdown('<div class="pv-section">Fetch summary</div>', unsafe_allow_html=True)
+        st.dataframe(pd.DataFrame(st.session_state.fetch_results), use_container_width=True, hide_index=True)
+    if st.session_state.fetched_fasta_text:
+        fasta_out = st.session_state.fetched_fasta_text
+        try:
+            fetched_preview = list(SeqIO.parse(io.StringIO(fasta_out), 'fasta'))
+            a, b, c = st.columns(3)
+            a.metric('Records fetched', len(fetched_preview))
+            b.metric('Total residues', f'{sum(len(r.seq) for r in fetched_preview):,}')
+            c.metric('Sequence type', st.session_state.get('fetched_sequence_type', fetched_type))
+        except Exception:
+            pass
+        st.text_area('FASTA preview', value=fasta_out, height=260)
+        d1, d2 = st.columns(2)
+        with d1:
+            st.download_button('Download .fasta', data=fasta_out, file_name='phylovision_ncbi_sequences.fasta', mime='text/plain', use_container_width=True)
+        with d2:
+            if st.button('Import into Sequence Input', use_container_width=True):
+                st.session_state.fasta_text = fasta_out
+                st.session_state.sequence_type = st.session_state.get('fetched_sequence_type', fetched_type)
+                st.session_state.tree = None
+                st.session_state.tree_signature = None
+                st.session_state.aligned_records = None
+                st.session_state.dist_df = None
+                st.success('Imported into PhyloVision session. Open Sequence Input to review and validate the records.')
+        st.info('Important: NCBI returns the stored sequences; they are not automatically aligned. PhyloVision’s current similarity and tree tools require equal-length aligned sequences. Align the records first, then use Sequence Input and the analysis tools.')
+    st.markdown('<div class="pv-card"><div class="pv-section">Troubleshooting</div><ul><li>Choose <b>Nucleotide</b> for DNA/RNA accessions or <b>Protein</b> for amino-acid accessions.</li><li>A valid accession in the wrong database may return no record.</li><li>Fetching requires Streamlit Cloud to have internet access; transient NCBI limits or network errors can be retried later.</li><li>Use records from the same gene/region or homologous protein family for meaningful evolutionary comparisons.</li></ul></div>', unsafe_allow_html=True)
 
 elif page == 'Sequence Input':
     st.markdown('<div class="pv-title">Sequence Input</div><div class="pv-muted">Upload a FASTA file or paste sequences. Give each sequence a unique header.</div>',unsafe_allow_html=True)
