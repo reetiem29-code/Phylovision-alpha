@@ -18,41 +18,43 @@ st.set_page_config(page_title='PhyloVision | From Sequences to Evolution', page_
 st.markdown('''
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
-:root { --pv-bg:#11151b; --pv-panel:#191f25; --pv-panel2:#202a2d; --pv-border:#35433f; --pv-sage:#a8c3a0; --pv-sage2:#d4e2c9; --pv-lilac:#c8b5e8; --pv-text:#f2f1e9; --pv-muted:#b6c0b6; }
-.stApp { background: radial-gradient(ellipse at 88% 0%, rgba(89,112,91,.18), transparent 32%), linear-gradient(145deg,#12171b 0%,#151a20 58%,#111719 100%); color:var(--pv-text); font-family:'DM Sans',sans-serif; }
+:root { --pv-bg:#f7f6fb; --pv-panel:#ffffff; --pv-panel2:#f1eef8; --pv-border:#e4deef; --pv-purple:#8772ad; --pv-purple2:#6e5a94; --pv-lilac:#eee8f7; --pv-text:#292637; --pv-muted:#6e6a7c; }
+.stApp { background:radial-gradient(ellipse at 88% 0%, rgba(183,163,218,.15), transparent 34%), linear-gradient(145deg,#faf9fc 0%,#f6f4fa 58%,#f9f8fb 100%); color:var(--pv-text); font-family:'DM Sans',sans-serif; }
 [data-testid="stHeader"] { background:transparent; }
-[data-testid="stSidebar"] { background:linear-gradient(180deg,#1b2424 0%,#171e21 100%); border-right:1px solid #34423c; }
-[data-testid="stSidebar"] * { color:#edf1e7; }
+[data-testid="stSidebar"] { background:linear-gradient(180deg,#f5f2fa 0%,#f9f8fc 100%); border-right:1px solid #e5dfef; }
+[data-testid="stSidebar"] * { color:#393448; }
 [data-testid="stSidebar"] [data-testid="stRadio"] label { padding:.45rem .55rem; border-radius:9px; }
-[data-testid="stSidebar"] [data-testid="stRadio"] label:hover { background:rgba(168,195,160,.10); }
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover { background:rgba(135,114,173,.10); }
 .block-container { padding-top:1.3rem; padding-bottom:2.5rem; max-width:1480px; }
-.pv-card { background:linear-gradient(145deg,rgba(31,41,42,.92),rgba(24,31,34,.96)); border:1px solid rgba(151,178,150,.22); border-radius:15px; padding:19px 21px; margin-bottom:14px; box-shadow:0 12px 30px rgba(0,0,0,.10); }
-.pv-muted { color:var(--pv-muted); font-size:.91rem; line-height:1.55; }
-.pv-kicker { color:var(--pv-sage); font-size:.72rem; text-transform:uppercase; letter-spacing:.16em; font-weight:700; }
-.pv-title { font-family:'Manrope',sans-serif; font-size:1.65rem; font-weight:700; color:#f5f3e9; margin:.12rem 0 .35rem 0; letter-spacing:-.025em; }
-.pv-section { font-family:'Manrope',sans-serif; font-size:1.04rem; font-weight:700; margin-bottom:9px; color:#e9eee2; }
-.pv-botanical { color:var(--pv-sage); }
-.pv-pill { display:inline-block; background:rgba(168,195,160,.10); color:#d7e8cd; border:1px solid rgba(168,195,160,.3); border-radius:99px; padding:5px 10px; font-size:.78rem; }
-div.stButton > button, div.stDownloadButton > button { border-radius:10px; border:1px solid #769071; background:#a9c3a0; color:#17211b; font-weight:700; min-height:2.55rem; transition:all .16s ease; }
-div.stButton > button:hover, div.stDownloadButton > button:hover { border-color:#d8e6cf; background:#bdd3b4; color:#17211b; }
-.stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] { background:#171f22!important; color:#f2f1e9!important; border-color:#43544a!important; border-radius:9px!important; }
-[data-testid="stMetric"] { background:rgba(31,42,41,.8); padding:13px 15px; border:1px solid rgba(151,178,150,.23); border-radius:12px; }
-[data-testid="stMetricLabel"] { color:#bdc9bc!important; }
-[data-testid="stMetricValue"] { color:#f5f3e9!important; }
-[data-testid="stDataFrame"] { border:1px solid rgba(151,178,150,.18); border-radius:10px; overflow:hidden; }
-hr { border-color:#34413c; }
+.pv-card { background:rgba(255,255,255,.88); border:1px solid #e7e1f0; border-radius:15px; padding:19px 21px; margin-bottom:14px; box-shadow:0 7px 24px rgba(65,48,91,.045); }
+.pv-muted { color:var(--pv-muted); font-size:.91rem; line-height:1.6; }
+.pv-kicker { color:var(--pv-purple2); font-size:.72rem; text-transform:uppercase; letter-spacing:.16em; font-weight:700; }
+.pv-title { font-family:'Manrope',sans-serif; font-size:1.65rem; font-weight:700; color:#302a40; margin:.12rem 0 .35rem 0; letter-spacing:-.025em; }
+.pv-section { font-family:'Manrope',sans-serif; font-size:1.04rem; font-weight:700; margin-bottom:9px; color:#393148; }
+.pv-botanical { color:var(--pv-purple2); }
+.pv-pill { display:inline-block; background:#f0ebf8; color:#625080; border:1px solid #ded4ed; border-radius:99px; padding:5px 10px; font-size:.78rem; }
+div.stButton > button, div.stDownloadButton > button { border-radius:10px; border:1px solid #d3c7e6; background:#eee8f7; color:#44365f; font-weight:650; min-height:2.5rem; transition:all .16s ease; }
+div.stButton > button:hover, div.stDownloadButton > button:hover { border-color:#b6a3d4; background:#e5dcf2; color:#35284f; }
+.stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] { background:#fff!important; color:#302a40!important; border-color:#ded8e9!important; border-radius:9px!important; }
+[data-testid="stMetric"] { background:#fff; padding:13px 15px; border:1px solid #e7e1f0; border-radius:12px; }
+[data-testid="stMetricLabel"] { color:#706a7e!important; }
+[data-testid="stMetricValue"] { color:#302a40!important; }
+[data-testid="stDataFrame"] { border:1px solid #e7e1f0; border-radius:10px; overflow:hidden; }
+hr { border-color:#e5dfef; }
 footer {visibility:hidden;}
 [data-testid="stSidebar"] { min-width: 285px; }
 [data-testid="stSidebar"] .block-container { padding-top:1.1rem; }
-.pv-side-label { color:#a8c3a0; font-size:.67rem; letter-spacing:.15em; font-weight:800; margin:.35rem 0 .35rem; }
-.pv-side-divider { border-top:1px solid rgba(168,195,160,.19); margin:1rem 0 .8rem; }
-.pv-step-hint { color:#9daaa0; font-size:.72rem; line-height:1.35; padding:0 .35rem .42rem 1.55rem; }
-.pv-readiness { color:#d5dfd2; font-size:.82rem; line-height:1.9; }
-[data-testid="stSidebar"] div.stButton > button { text-align:left; min-height:2.2rem; padding:.35rem .7rem; border-color:rgba(168,195,160,.18); background:rgba(255,255,255,.025); color:#e9eee2; font-weight:600; }
-[data-testid="stSidebar"] div.stButton > button[kind="primary"] { background:rgba(168,195,160,.18); border-color:#8eaa88; color:#f4f5ec; }
-[data-testid="stSidebar"] div.stButton > button:hover { background:rgba(168,195,160,.13); border-color:#8eaa88; }
+.pv-side-label { color:#776396; font-size:.67rem; letter-spacing:.15em; font-weight:800; margin:.35rem 0 .35rem; }
+.pv-side-divider { border-top:1px solid #e6e0ef; margin:1rem 0 .8rem; }
+.pv-step-hint { color:#797387; font-size:.72rem; line-height:1.35; padding:0 .35rem .42rem 1.55rem; }
+.pv-readiness { color:#514a60; font-size:.82rem; line-height:1.9; }
+[data-testid="stSidebar"] div.stButton > button { text-align:left; min-height:2.2rem; padding:.35rem .7rem; border-color:#e3dced; background:rgba(255,255,255,.72); color:#443b54; font-weight:600; }
+[data-testid="stSidebar"] div.stButton > button[kind="primary"] { background:#e9e1f4; border-color:#cbbce0; color:#44335f; }
+[data-testid="stSidebar"] div.stButton > button:hover { background:#eee8f7; border-color:#c7b7de; }
 [data-testid="stSidebar"] [data-testid="stTextInput"] input { font-size:.84rem; }
-
+.pv-accession-feature { background:linear-gradient(105deg,#f0eafa 0%,#fff 72%); border:1px solid #ded2ee; border-left:4px solid #9a83bf; border-radius:14px; padding:16px 19px; margin:12px 0 18px; }
+.pv-guide-item { padding:12px 14px; border:1px solid #e9e3f1; border-radius:12px; background:rgba(255,255,255,.8); min-height:118px; }
+[data-testid="stProgressBar"] > div > div { background-color:#9a83bf; }
 </style>
 ''', unsafe_allow_html=True)
 
@@ -60,7 +62,7 @@ footer {visibility:hidden;}
 DEMO_FASTA = '''>Human_demo\nATGCTAGCTAGCTACGATCGATCGATGCTAGCTAGCTAACGTTAGCTAGCTAGGCTAACGATCGATCGATGCTAGC\n>Chimp_demo\nATGCTAGCTAGCTACGATCGATCGATGCTAGCTAGCTAACGTTAGCTAGCTAGGCTAACGATCGATCGATGCTAGT\n>Gorilla_demo\nATGCTAGCTAGCTACGATCGATCGATGCTAGCTAGCTAACGTTAGCTAGCTAGGCTAACGATCGATCAATGCTAGT\n>Mouse_demo\nATGATAGCTTGCTACGATCAATCGATGCTAGATAGCTAACGTTAGCTAGTTAGGCTAACGATCAATCGATGCTAGT\n>Rat_demo\nATGATAGCTTGCTACGATCAATCGATGCTAGATAGCTAACGTTAGCTAGTTAGGCTAACGATCAATCGATGCTAGC'''
 BASE_COLORS = {'A':'#65bd8b','T':'#ed7e88','G':'#f1bd65','C':'#67b8ee','U':'#b89ce9','-':'#59627f','N':'#8b8fa7'}
 CREATOR = 'Anureet Dutta'
-CO_CREATORS = ['Sreejeeta Kundu','Aishwarya Banik','Arya Ghosh','Ram Argha Nayak']
+CO_CREATORS = ['Sreejeeta Kundu','Aishwarya Banik','Soham Pariyal','Ram Argha Nayak']
 
 # Header with the supplied project logo.
 h1, h2 = st.columns([1.5, 3.6], vertical_alignment='center')
@@ -68,7 +70,7 @@ with h1:
     if LOGO.exists(): st.image(str(LOGO), width=280)
     else: st.markdown('<div class="pv-title">🧬 PhyloVision</div>', unsafe_allow_html=True)
 with h2:
-    st.markdown('<div class="pv-kicker">From Sequences to Evolution</div><div style="font-size:1.55rem;font-weight:700;color:#f7f4ff;font-family:Manrope">Biological relationships, with room to breathe.</div><div class="pv-muted">A calm, precise workspace for sequence comparison and evolutionary exploration.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-kicker">From Sequences to Evolution</div><div style="font-size:1.55rem;font-weight:700;color:#393148;font-family:Manrope">Biological relationships, with room to breathe.</div><div class="pv-muted">A calm, precise workspace for sequence comparison and evolutionary exploration.</div>', unsafe_allow_html=True)
 st.markdown('')
 
 # Guided workflow and compact direct-access tool dock. Streamlit provides the native
@@ -104,7 +106,7 @@ if 'page' not in st.session_state:
     st.session_state.page = 'Home'
 
 with st.sidebar:
-    st.markdown('<div style="font-family:Manrope,sans-serif;font-size:1.28rem;font-weight:800;letter-spacing:-.035em">✳ PhyloVision</div><div style="color:#a8c3a0;font-size:.68rem;letter-spacing:.15em;font-weight:700;margin:.15rem 0 .9rem">BOTANICAL BIOINFORMATICS</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-family:Manrope,sans-serif;font-size:1.28rem;font-weight:800;letter-spacing:-.035em">✳ PhyloVision</div><div style="color:#8772ad;font-size:.68rem;letter-spacing:.15em;font-weight:700;margin:.15rem 0 .9rem">BOTANICAL BIOINFORMATICS</div>', unsafe_allow_html=True)
     st.markdown('<div class="pv-side-label">QUICK ACTION SEARCH</div>', unsafe_allow_html=True)
     search_query = st.text_input('Search tools', placeholder='Find a tool or action…', label_visibility='collapsed', key='quick_action_search')
     if search_query.strip():
@@ -373,8 +375,8 @@ def rectangular_tree_figure(tree):
             fig.add_trace(go.Scatter(x=[xmap[parent],xmap[c]],y=[ymap[c],ymap[c]],mode='lines',line=dict(color=color,width=2.4),hoverinfo='skip',showlegend=False))
     maxx=max(xmap.values()) if xmap else 1
     for t in terminals:
-        fig.add_trace(go.Scatter(x=[xmap[t]],y=[ymap[t]],mode='markers+text',text=[t.name],textposition='middle right',textfont=dict(color='#eeeaff',size=11),marker=dict(size=7,color=palette[terminals.index(t)%len(palette)]),hovertemplate=f'<b>{t.name}</b><br>Root distance: {xmap[t]:.4f}<extra></extra>',showlegend=False))
-    fig.update_layout(height=max(430,n*42),margin=dict(l=10,r=130,t=10,b=10),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',xaxis=dict(title='Accumulated branch length (relative evolutionary change)',showgrid=True,gridcolor='rgba(130,145,190,.15)',zeroline=False,color='#c4cbe8',rangemode='tozero'),yaxis=dict(visible=False,autorange='reversed'),font=dict(family='DM Sans',color='#f4f1ff'),showlegend=False)
+        fig.add_trace(go.Scatter(x=[xmap[t]],y=[ymap[t]],mode='markers+text',text=[t.name],textposition='middle right',textfont=dict(color='#393448',size=11),marker=dict(size=7,color=palette[terminals.index(t)%len(palette)]),hovertemplate=f'<b>{t.name}</b><br>Root distance: {xmap[t]:.4f}<extra></extra>',showlegend=False))
+    fig.update_layout(height=max(430,n*42),margin=dict(l=10,r=130,t=10,b=10),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',xaxis=dict(title='Accumulated branch length (relative evolutionary change)',showgrid=True,gridcolor='rgba(130,145,190,.15)',zeroline=False,color='#6e687c',rangemode='tozero'),yaxis=dict(visible=False,autorange='reversed'),font=dict(family='DM Sans',color='#393448'),showlegend=False)
     return fig
 
 
@@ -418,9 +420,9 @@ def radial_tree_figure(tree):
         label_radius = radius_map[term] + max_r * .07
         lx, ly = label_radius * math.cos(a), label_radius * math.sin(a)
         fig.add_trace(go.Scatter(x=[x],y=[y],mode='markers',marker=dict(size=7,color=palette[terminals.index(term)%len(palette)],line=dict(color='#e6eddc',width=.8)),name=term.name,hovertemplate=f'<b>{term.name}</b><br>Root distance: {radius_map[term]:.4f}<extra></extra>',showlegend=False))
-        fig.add_annotation(x=lx,y=ly,text=term.name,showarrow=False,font=dict(size=10,color='#e7eee2'),xanchor='left' if math.cos(a)>=0 else 'right',yanchor='middle')
+        fig.add_annotation(x=lx,y=ly,text=term.name,showarrow=False,font=dict(size=10,color='#393448'),xanchor='left' if math.cos(a)>=0 else 'right',yanchor='middle')
     limit = max_r * 1.28
-    fig.update_layout(height=max(520,n*34),margin=dict(l=25,r=25,t=25,b=25),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(family='DM Sans',color='#e9eee5'),showlegend=False,xaxis=dict(visible=False,range=[-limit,limit],scaleanchor='y',scaleratio=1),yaxis=dict(visible=False,range=[-limit,limit]),hovermode='closest')
+    fig.update_layout(height=max(520,n*34),margin=dict(l=25,r=25,t=25,b=25),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(family='DM Sans',color='#393448'),showlegend=False,xaxis=dict(visible=False,range=[-limit,limit],scaleanchor='y',scaleratio=1),yaxis=dict(visible=False,range=[-limit,limit]),hovermode='closest')
     return fig
 
 
@@ -473,14 +475,31 @@ def current_records():
 
 # Home
 if page == 'Home':
-    st.markdown('<div class="pv-card"><div class="pv-kicker">Welcome to your sequence workspace</div><div class="pv-title">From raw sequences to clearer relationships.</div><div class="pv-muted">PhyloVision brings sequence input, alignment inspection, similarity comparison and phylogenetic tree interpretation into one calm, student-friendly workflow.</div></div>',unsafe_allow_html=True)
-    a,b,c=st.columns(3)
-    for col,icon,title,desc in [(a,'🧬','Alignment Explorer','Inspect matching positions, differences and gaps.'),(b,'🌿','Understand My Tree','Get a plain-language explanation of the inferred tree.'),(c,'▦','Sequence Similarity','Compare pairwise sequence identity in a heatmap and table.')]:
-        with col: st.markdown(f'<div class="pv-card" style="min-height:155px"><div style="font-size:1.5rem">{icon}</div><div class="pv-section">{title}</div><div class="pv-muted">{desc}</div></div>',unsafe_allow_html=True)
-    st.markdown('<div class="pv-card"><div class="pv-section">Your guided lab</div><div class="pv-muted">Use the numbered <b>Guided Lab</b> steps in the sidebar if you are new to phylogenetics. Prefer to work your own way? The separate <b>Tool Dock</b> gives direct access to every module, and Quick Action Search finds tools by name or task.</div><ol><li><b>Prepare:</b> upload, paste, or fetch FASTA records.</li><li><b>Inspect:</b> confirm sequences are valid and aligned before tree building.</li><li><b>Analyze:</b> construct a phylogenetic tree.</li><li><b>Explore:</b> compare sequence identity and interpret the result.</li></ol><div class="pv-muted">Readiness indicators in the sidebar track available input, alignment, and tree state. Demo sequences are illustrative teaching data, not verified reference sequences.</div></div>',unsafe_allow_html=True)
+    st.markdown('<div class="pv-card"><div class="pv-kicker">Welcome to your sequence workspace</div><div class="pv-title">From raw sequences to clearer relationships.</div><div class="pv-muted">PhyloVision brings sequence preparation, alignment inspection, similarity comparison and phylogenetic interpretation into one calm, student-friendly workflow.</div></div>',unsafe_allow_html=True)
+    st.markdown('<div class="pv-accession-feature"><div class="pv-kicker">A faster way to get started</div><div class="pv-section" style="margin:.3rem 0">Have accession codes? Turn them into FASTA.</div><div class="pv-muted">Retrieve nucleotide or protein records from NCBI without leaving PhyloVision, preview the sequences, then bring them into your workflow. Find it in the sidebar under <b>Guided Lab → Fetch by accession</b>, or use <b>Quick Action Search</b> and type “accession”.</div></div>', unsafe_allow_html=True)
+    if st.button('Open Accession → FASTA', key='home_accession_cta'):
+        st.session_state.page = 'Accession → FASTA'
+        st.rerun()
+    st.markdown('<div class="pv-section">Quick guide to PhyloVision</div><div class="pv-muted" style="margin-bottom:12px">Use the numbered Guided Lab steps in the sidebar if you are new. For direct access, use Tool Dock; to find something quickly, use Quick Action Search.</div>', unsafe_allow_html=True)
+    guide = [
+        ('01 · Sequence Input','Paste or upload FASTA, or load demo sequences.','Sidebar → Guided Lab → Prepare sequences'),
+        ('02 · Accession → FASTA','Fetch records from NCBI using accession codes; preview and download FASTA.','Sidebar → Guided Lab → Fetch by accession'),
+        ('03 · Alignment Explorer','Inspect aligned positions, gaps and differences. Sequences must be aligned before tree building.','Sidebar → Guided Lab → Inspect alignment'),
+        ('04 · Phylogenetic Tree','Build a distance-based tree using available methods and explore branching patterns.','Sidebar → Guided Lab → Build a tree'),
+        ('05 · Sequence Similarity','Compare pairwise identity across comparable sequence positions.','Tool Dock → Sequence Similarity'),
+        ('06 · Evolution Lens','Explore patterns and summaries from the current analysis.','Tool Dock → Evolution Lens'),
+        ('07 · Understand My Tree','Read a plain-language explanation of tree structure and its limitations.','Tool Dock → Understand My Tree'),
+        ('08 · Creators & About','Find project credits, methodology and current scientific limitations.','Tool Dock → Creators & About'),
+    ]
+    for offset in range(0, len(guide), 2):
+        cols = st.columns(2)
+        for col, item in zip(cols, guide[offset:offset+2]):
+            with col:
+                st.markdown(f'<div class="pv-guide-item"><div class="pv-section">{item[0]}</div><div class="pv-muted">{item[1]}</div><div style="font-size:.78rem;color:#776396;margin-top:8px"><b>Find it:</b> {item[2]}</div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-card" style="margin-top:14px"><div class="pv-section">Suggested beginner workflow</div><ol><li>Prepare sequences or fetch them using accession codes.</li><li>Inspect the alignment and confirm sequences are suitable for comparison.</li><li>Build a phylogenetic tree.</li><li>Explore similarity and interpret the result cautiously.</li></ol><div class="pv-muted">The sidebar readiness indicator reflects session state, not scientific validity. Demo sequences are illustrative teaching data, not verified reference sequences.</div></div>',unsafe_allow_html=True)
 
 elif page == 'Accession → FASTA':
-    st.markdown('<div class="pv-title">Accession → FASTA</div><div class="pv-muted">Retrieve real nucleotide or protein records from NCBI by accession code, preview the returned FASTA, and bring it into your existing PhyloVision workflow.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-kicker">Sequence acquisition</div><div class="pv-title">Accession → FASTA</div><div class="pv-muted">A key PhyloVision shortcut: retrieve nucleotide or protein records from NCBI by accession code, preview the returned FASTA, and bring it into your existing workflow.</div>', unsafe_allow_html=True)
     st.markdown('<div class="pv-card"><div class="pv-section">Fetch records from NCBI</div><div class="pv-muted">Enter one accession per line. Choose the database explicitly; an accession by itself does not always tell us whether it represents DNA or protein.</div></div>', unsafe_allow_html=True)
     db_label = st.radio('NCBI database', ['Nucleotide (DNA/RNA)', 'Protein'], horizontal=True, key='accession_database')
     db_name = 'nucleotide' if db_label.startswith('Nucleotide') else 'protein'
@@ -742,11 +761,11 @@ elif page == 'Sequence Similarity':
                 st.caption(f'{len(records)} sequences · Identity excludes gaps and ambiguous/missing symbols (-, ?, ., N, X).')
             fig = go.Figure(data=go.Heatmap(z=sim.values, x=sim.columns, y=sim.index,
                 colorscale=[[0,'#3b5148'],[.5,'#8cae91'],[1,'#d9e8bf']], zmin=0,zmax=100,connectgaps=False,
-                colorbar=dict(title='Identity %',tickfont=dict(color='#dfe7d9'),outlinewidth=0),
+                colorbar=dict(title='Identity %',tickfont=dict(color='#514a60'),outlinewidth=0),
                 hovertemplate='%{y} vs %{x}<br>Identity: %{z:.2f}%<extra></extra>',
                 text=np.where(np.isfinite(sim.values), np.vectorize(lambda v: f'{v:.1f}%' if np.isfinite(v) else 'No data')(sim.values), 'No data'),
                 texttemplate='%{text}', textfont=dict(color='#17211b',size=11)))
-            fig.update_layout(height=max(360,len(records)*54),margin=dict(l=10,r=18,t=12,b=75),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(color='#e9eee5',size=11),xaxis=dict(tickangle=-35,side='bottom'),yaxis=dict(autorange='reversed'))
+            fig.update_layout(height=max(360,len(records)*54),margin=dict(l=10,r=18,t=12,b=75),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(color='#393448',size=11),xaxis=dict(tickangle=-35,side='bottom'),yaxis=dict(autorange='reversed'))
             st.plotly_chart(fig,use_container_width=True,config={'displaylogo':False})
             with st.expander('Inspect pairwise identity values', expanded=True):
                 st.dataframe(sim.style.format('{:.2f}%',na_rep='No comparable sites'),use_container_width=True)
@@ -758,7 +777,7 @@ elif page == 'Sequence Similarity':
 
 else: # Creators & About
     st.markdown('<div class="pv-title">Creators & About</div><div class="pv-muted">The people and purpose behind PhyloVision.</div>',unsafe_allow_html=True)
-    st.markdown('<div class="pv-card"><div class="pv-kicker">Project creator</div><div style="font-family:Manrope;font-size:1.5rem;font-weight:800;color:#e1b5ff;margin-top:4px">Anureet Dutta</div><div class="pv-muted">Creator & project lead</div><hr><div class="pv-kicker">Co-creators</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px">'+''.join(f'<div style="padding:14px 15px;border-radius:12px;background:#202747;border:1px solid #394369"><div style="font-weight:700;color:#f3edff">{name}</div><div class="pv-muted">Co-creator</div></div>' for name in CO_CREATORS)+'</div></div>',unsafe_allow_html=True)
+    st.markdown('<div class="pv-card"><div class="pv-kicker">Project creator</div><div style="font-family:Manrope;font-size:1.5rem;font-weight:800;color:#79639d;margin-top:4px">Anureet Dutta</div><div class="pv-muted">Creator & project lead</div><hr><div class="pv-kicker">Co-creators</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px">'+''.join(f'<div style="padding:14px 15px;border-radius:12px;background:#f5f1fa;border:1px solid #e2d9ef"><div style="font-weight:700;color:#443653">{name}</div><div class="pv-muted">Co-creator</div></div>' for name in CO_CREATORS)+'</div></div>',unsafe_allow_html=True)
     st.markdown('<div class="pv-card"><div class="pv-section">About the project</div><p>PhyloVision is an educational bioinformatics dashboard designed to connect multiple sequence alignment with phylogenetic tree construction and interpretation. It brings sequence input, an alignment view, a distance-based tree and pairwise identity summaries into one interface.</p><p><b>Learning outcomes:</b> FASTA handling, sequence validation, alignment inspection, pairwise similarity, distance-based tree construction and cautious biological interpretation.</p><p class="pv-muted">Current limitations: sequences must already be aligned and equal length; the tree uses Neighbor Joining with uncorrected p-distance; no bootstrap support is calculated; protein input is accepted for comparison, but this simple distance approach is not a substitute for a validated protein-specific evolutionary model. For research, use suitable validated tools and document sequence accessions and settings.</p></div>',unsafe_allow_html=True)
     st.markdown('<div class="pv-card"><div class="pv-section">Credits & acknowledgement</div><p>Built as a student biotechnology software project, with a focus on making sequence-based evolutionary analysis easier to explore and explain.</p><div class="pv-muted">Better data. Clearer relationships. A deeper understanding of life.</div></div>',unsafe_allow_html=True)
 

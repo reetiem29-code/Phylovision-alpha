@@ -30,3 +30,11 @@ Commit the updated `app.py`, `README.md`, and `requirements.txt` to the **same G
 - Confirm that sequences are appropriate and aligned before building a phylogenetic tree.
 - The included demo sequences are illustrative teaching data, not verified reference sequences.
 - Results depend on input quality and the selected method.
+
+
+## Accession → FASTA
+Fetch nucleotide or protein records from NCBI using accession codes, preview the returned FASTA, and download or import records into the existing workflow. Retrieved sequences may still need multiple sequence alignment before tree construction.
+
+
+## Interface guide
+The Home page includes a short tool guide and navigation paths. Use Guided Lab for a step-by-step route, Tool Dock for direct access, and Quick Action Search to find modules. The interface uses a subtle lavender, purple, and white palette.
