@@ -1,4 +1,4 @@
-streamlit>=1.36
+streamlit>=1.39
 biopython>=1.83
 plotly>=5.22
 pandas>=2.0

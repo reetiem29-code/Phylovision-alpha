@@ -17,26 +17,30 @@ st.set_page_config(page_title='PhyloVision | From Sequences to Evolution', page_
 
 st.markdown('''
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root { --pv-bg:#0c1022; --pv-panel:#151b35; --pv-panel2:#1b2342; --pv-border:#343e65; --pv-purple:#bb83ec; --pv-pink:#e58dbd; --pv-text:#f2f1ff; --pv-muted:#b9bfdc; }
-.stApp { background: radial-gradient(ellipse at 10% 0%, #27264e 0%, #11162c 36%, #0b1021 78%); color:var(--pv-text); font-family:'DM Sans',sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+:root { --pv-bg:#11151b; --pv-panel:#191f25; --pv-panel2:#202a2d; --pv-border:#35433f; --pv-sage:#a8c3a0; --pv-sage2:#d4e2c9; --pv-lilac:#c8b5e8; --pv-text:#f2f1e9; --pv-muted:#b6c0b6; }
+.stApp { background: radial-gradient(ellipse at 88% 0%, rgba(89,112,91,.18), transparent 32%), linear-gradient(145deg,#12171b 0%,#151a20 58%,#111719 100%); color:var(--pv-text); font-family:'DM Sans',sans-serif; }
 [data-testid="stHeader"] { background:transparent; }
-[data-testid="stSidebar"] { background:linear-gradient(180deg,#171b37,#10152b); border-right:1px solid #30385c; }
-[data-testid="stSidebar"] * { color:#eeeaff; }
-.block-container { padding-top:1.1rem; padding-bottom:2rem; max-width:1600px; }
-.pv-card { background:linear-gradient(145deg,rgba(30,38,72,.92),rgba(19,25,49,.96)); border:1px solid var(--pv-border); border-radius:18px; padding:18px 20px; margin-bottom:14px; box-shadow:0 10px 28px rgba(0,0,0,.12); }
-.pv-muted { color:var(--pv-muted); font-size:.9rem; }
-.pv-kicker { color:#cba1f3; font-size:.75rem; text-transform:uppercase; letter-spacing:.13em; font-weight:700; }
-.pv-title { font-family:'Manrope',sans-serif; font-size:1.5rem; font-weight:800; color:#fbf9ff; margin:.1rem 0 .35rem 0; }
-.pv-section { font-family:'Manrope',sans-serif; font-size:1.08rem; font-weight:700; margin-bottom:10px; }
-.pv-pill { display:inline-block; background:#263e4c; color:#a7f3d0; border:1px solid #35665f; border-radius:99px; padding:5px 10px; font-size:.78rem; }
-div.stButton > button, div.stDownloadButton > button { border-radius:12px; border:1px solid #5a4d83; background:linear-gradient(110deg,#b66bd1,#7664d9); color:white; font-weight:700; min-height:2.6rem; }
-div.stButton > button:hover, div.stDownloadButton > button:hover { border-color:#e2c2ff; color:white; filter:brightness(1.08); }
-.stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] { background:#121a35!important; color:#f5f3ff!important; border-color:#414b75!important; border-radius:10px!important; }
-[data-testid="stMetric"] { background:#171f3d; padding:13px 16px; border:1px solid #354064; border-radius:14px; }
-[data-testid="stMetricLabel"] { color:#c5c9e5!important; }
-[data-testid="stMetricValue"] { color:#fff!important; }
-hr { border-color:#30395d; }
+[data-testid="stSidebar"] { background:linear-gradient(180deg,#1b2424 0%,#171e21 100%); border-right:1px solid #34423c; }
+[data-testid="stSidebar"] * { color:#edf1e7; }
+[data-testid="stSidebar"] [data-testid="stRadio"] label { padding:.45rem .55rem; border-radius:9px; }
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover { background:rgba(168,195,160,.10); }
+.block-container { padding-top:1.3rem; padding-bottom:2.5rem; max-width:1480px; }
+.pv-card { background:linear-gradient(145deg,rgba(31,41,42,.92),rgba(24,31,34,.96)); border:1px solid rgba(151,178,150,.22); border-radius:15px; padding:19px 21px; margin-bottom:14px; box-shadow:0 12px 30px rgba(0,0,0,.10); }
+.pv-muted { color:var(--pv-muted); font-size:.91rem; line-height:1.55; }
+.pv-kicker { color:var(--pv-sage); font-size:.72rem; text-transform:uppercase; letter-spacing:.16em; font-weight:700; }
+.pv-title { font-family:'Manrope',sans-serif; font-size:1.65rem; font-weight:700; color:#f5f3e9; margin:.12rem 0 .35rem 0; letter-spacing:-.025em; }
+.pv-section { font-family:'Manrope',sans-serif; font-size:1.04rem; font-weight:700; margin-bottom:9px; color:#e9eee2; }
+.pv-botanical { color:var(--pv-sage); }
+.pv-pill { display:inline-block; background:rgba(168,195,160,.10); color:#d7e8cd; border:1px solid rgba(168,195,160,.3); border-radius:99px; padding:5px 10px; font-size:.78rem; }
+div.stButton > button, div.stDownloadButton > button { border-radius:10px; border:1px solid #769071; background:#a9c3a0; color:#17211b; font-weight:700; min-height:2.55rem; transition:all .16s ease; }
+div.stButton > button:hover, div.stDownloadButton > button:hover { border-color:#d8e6cf; background:#bdd3b4; color:#17211b; }
+.stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] { background:#171f22!important; color:#f2f1e9!important; border-color:#43544a!important; border-radius:9px!important; }
+[data-testid="stMetric"] { background:rgba(31,42,41,.8); padding:13px 15px; border:1px solid rgba(151,178,150,.23); border-radius:12px; }
+[data-testid="stMetricLabel"] { color:#bdc9bc!important; }
+[data-testid="stMetricValue"] { color:#f5f3e9!important; }
+[data-testid="stDataFrame"] { border:1px solid rgba(151,178,150,.18); border-radius:10px; overflow:hidden; }
+hr { border-color:#34413c; }
 footer {visibility:hidden;}
 </style>
 ''', unsafe_allow_html=True)
@@ -53,18 +57,16 @@ with h1:
     if LOGO.exists(): st.image(str(LOGO), width=280)
     else: st.markdown('<div class="pv-title">🧬 PhyloVision</div>', unsafe_allow_html=True)
 with h2:
-    st.markdown('<div class="pv-kicker">From Sequences to Evolution</div><div style="font-size:1.55rem;font-weight:700;color:#f7f4ff;font-family:Manrope">Explore biological relationships, clearly.</div><div class="pv-muted">A student-friendly workspace for sequence alignment, tree building and interpretation.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="pv-kicker">From Sequences to Evolution</div><div style="font-size:1.55rem;font-weight:700;color:#f7f4ff;font-family:Manrope">Biological relationships, with room to breathe.</div><div class="pv-muted">A calm, precise workspace for sequence comparison and evolutionary exploration.</div>', unsafe_allow_html=True)
 st.markdown('')
 
 with st.sidebar:
-    st.markdown('### 🧬 PhyloVision')
-    st.caption('BIOINFORMATICS WORKSPACE')
-    page = st.radio('Navigate', ['Home','Sequence Input','Alignment Explorer','Phylogenetic Tree','Evolution Lens','Understand My Tree','Sequence Similarity','Creators & About'], label_visibility='collapsed')
-    st.markdown('---')
-    st.markdown('**Workflow**')
-    st.markdown('1. Add sequences\n2. Review alignment\n3. Build a tree\n4. Interpret similarities')
-    st.markdown('---')
-    st.caption('Educational project • Results depend on input quality and method.')
+    st.markdown('<div style="font-family:Manrope;font-size:1.28rem;font-weight:800;letter-spacing:-.03em">✳ PhyloVision</div><div style="color:#a8c3a0;font-size:.69rem;letter-spacing:.15em;font-weight:700;margin:.2rem 0 1.1rem">BOTANICAL BIOINFORMATICS</div>', unsafe_allow_html=True)
+    nav_group = st.radio('Workspace', ['Start here', 'Analyze', 'Explore results', 'Learn & about'], key='nav_group')
+    nav_options = {'Start here':['Home','Sequence Input'], 'Analyze':['Alignment Explorer','Phylogenetic Tree'], 'Explore results':['Sequence Similarity','Evolution Lens','Understand My Tree'], 'Learn & about':['Creators & About']}
+    page = st.radio('Choose a tool', nav_options[nav_group], key='nav_'+nav_group)
+    st.markdown('<div style="border-top:1px solid #34423c;margin:1rem 0"></div><div style="color:#a8c3a0;font-size:.72rem;font-weight:700;letter-spacing:.12em">SUGGESTED FLOW</div><div style="font-size:.84rem;line-height:1.9;color:#d0d8ce;margin-top:.45rem">01 &nbsp; Input sequences<br>02 &nbsp; Check alignment<br>03 &nbsp; Build a tree<br>04 &nbsp; Explore similarity</div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top:1.1rem;color:#91a096;font-size:.75rem;line-height:1.5">Educational analysis · Results depend on input quality and method.</div>', unsafe_allow_html=True)
 
 if 'fasta_text' not in st.session_state: st.session_state.fasta_text = DEMO_FASTA
 if 'tree' not in st.session_state: st.session_state.tree = None
@@ -80,7 +82,7 @@ def parse_fasta(text):
     if not text.strip(): raise ValueError('Please paste or upload FASTA sequences first.')
     try: records = list(SeqIO.parse(io.StringIO(text), 'fasta'))
     except Exception as e: raise ValueError(f'Could not read FASTA: {e}')
-    if len(records) < 3: raise ValueError('Please provide at least 3 sequences to build a useful example tree.')
+    if len(records) < 2: raise ValueError('Please provide at least 2 FASTA sequences to compare.')
     seen=set()
     for i,r in enumerate(records):
         r.id = re.sub(r'\s+','_',r.id.strip()) or f'Sequence_{i+1}'
@@ -104,10 +106,34 @@ def validate_records(records, seq_type):
     return records
 
 
+def comparable_pair(a, b):
+    # Exclude gaps and ambiguous/missing symbols from BOTH sides of a pair.
+    excluded = set('-?.NX')
+    pairs = [(x, y) for x, y in zip(str(a).upper(), str(b).upper())
+             if x not in excluded and y not in excluded]
+    compared = len(pairs)
+    matches = sum(x == y for x, y in pairs)
+    return matches, compared
+
+
 def pairwise_p_distance(a,b):
-    pairs=[(x,y) for x,y in zip(str(a).upper(),str(b).upper()) if x not in '-N?' and y not in '-N?']
-    if not pairs: return np.nan
-    return sum(x!=y for x,y in pairs)/len(pairs)
+    matches, compared = comparable_pair(a, b)
+    if compared == 0: return np.nan
+    return (compared - matches) / compared
+
+
+def make_similarity_matrix(records):
+    """Pairwise percent identity; NaN means no comparable positions."""
+    names = [r.id for r in records]
+    mat = np.full((len(records), len(records)), np.nan, dtype=float)
+    for i, record in enumerate(records):
+        _, compared = comparable_pair(record.seq, record.seq)
+        if compared: mat[i, i] = 100.0
+        for j in range(i + 1, len(records)):
+            matches, compared = comparable_pair(record.seq, records[j].seq)
+            value = (100.0 * matches / compared) if compared else np.nan
+            mat[i, j] = mat[j, i] = value
+    return pd.DataFrame(mat, index=names, columns=names)
 
 
 def make_distance_matrix(records):
@@ -116,7 +142,7 @@ def make_distance_matrix(records):
     for i in range(len(records)):
         for j in range(i+1,len(records)):
             d=pairwise_p_distance(records[i].seq,records[j].seq)
-            mat[i,j]=mat[j,i]=d
+            mat[i,j]=mat[j,i]=d if np.isfinite(d) else 1.0
     return pd.DataFrame(mat,index=names,columns=names)
 
 
@@ -269,6 +295,52 @@ def rectangular_tree_figure(tree):
     return fig
 
 
+
+def radial_tree_figure(tree):
+    """Radial phylogram layout for a less conventional, botanical-inspired tree view."""
+    terminals = tree.get_terminals()
+    n = len(terminals)
+    if n < 2:
+        return rectangular_tree_figure(tree)
+    angle_map = {term: (2 * math.pi * i / n) for i, term in enumerate(terminals)}
+    def assign_angle(clade):
+        if clade.is_terminal(): return angle_map[clade]
+        vals = [assign_angle(child) for child in clade.clades]
+        angle = math.atan2(sum(math.sin(v) for v in vals), sum(math.cos(v) for v in vals))
+        angle_map[clade] = angle
+        return angle
+    assign_angle(tree.root)
+    radius_map = {tree.root: 0.0}
+    def assign_radius(clade, parent_r):
+        for child in clade.clades:
+            r = parent_r + max(float(child.branch_length or 0.0), 0.008)
+            radius_map[child] = r
+            assign_radius(child, r)
+    assign_radius(tree.root, 0.0)
+    max_r = max(radius_map.values()) or 1.0
+    palette = ['#b9d0a8','#c8b5e8','#d6c69a','#92c7b7','#d7a7b9','#a5b9dc']
+    fig = go.Figure()
+    def xy(clade):
+        a, r = angle_map[clade], radius_map[clade]
+        return r * math.cos(a), r * math.sin(a)
+    for parent in tree.find_clades(order='preorder'):
+        if parent.is_terminal(): continue
+        px, py = xy(parent)
+        for child in parent.clades:
+            cx, cy = xy(child)
+            color = palette[terminals.index(child) % len(palette)] if child.is_terminal() else '#91aa91'
+            fig.add_trace(go.Scatter(x=[px,cx], y=[py,cy], mode='lines', line=dict(color=color,width=2.2), hoverinfo='skip', showlegend=False))
+    for term in terminals:
+        x, y = xy(term); a = angle_map[term]
+        label_radius = radius_map[term] + max_r * .07
+        lx, ly = label_radius * math.cos(a), label_radius * math.sin(a)
+        fig.add_trace(go.Scatter(x=[x],y=[y],mode='markers',marker=dict(size=7,color=palette[terminals.index(term)%len(palette)],line=dict(color='#e6eddc',width=.8)),name=term.name,hovertemplate=f'<b>{term.name}</b><br>Root distance: {radius_map[term]:.4f}<extra></extra>',showlegend=False))
+        fig.add_annotation(x=lx,y=ly,text=term.name,showarrow=False,font=dict(size=10,color='#e7eee2'),xanchor='left' if math.cos(a)>=0 else 'right',yanchor='middle')
+    limit = max_r * 1.28
+    fig.update_layout(height=max(520,n*34),margin=dict(l=25,r=25,t=25,b=25),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(family='DM Sans',color='#e9eee5'),showlegend=False,xaxis=dict(visible=False,range=[-limit,limit],scaleanchor='y',scaleratio=1),yaxis=dict(visible=False,range=[-limit,limit]),hovermode='closest')
+    return fig
+
+
 def alignment_html(records, max_cols=90):
     max_len=min(max(len(r.seq) for r in records),max_cols)
     html='<div style="overflow-x:auto"><table style="border-collapse:separate;border-spacing:2px;font:12px monospace;color:#f4f1ff;width:max-content"><thead><tr><th style="text-align:left;position:sticky;left:0;background:#171e3a;padding:6px">Sequence</th>'
@@ -369,7 +441,9 @@ elif page == 'Phylogenetic Tree':
     st.markdown('<div class="pv-title">Phylogenetic Tree</div><div class="pv-muted">Build and explore a distance-based tree from an existing alignment.</div>',unsafe_allow_html=True)
     try:
         records=current_records()
-        if len({len(r.seq) for r in records}) != 1:
+        if len(records) < 3:
+            st.error('Tree construction requires at least 3 sequences. Sequence Similarity can compare two or more.')
+        elif len({len(r.seq) for r in records}) != 1:
             st.error('Sequences must have equal length and be aligned before tree construction.')
         else:
             x,y=st.columns([1,2.3])
@@ -403,7 +477,9 @@ elif page == 'Phylogenetic Tree':
                         st.caption(f'PDF report unavailable: {e}')
             with y:
                 if st.session_state.tree is not None and st.session_state.tree_signature and st.session_state.tree_signature[0] == st.session_state.fasta_text and st.session_state.tree_signature[1] == st.session_state.sequence_type:
-                    st.plotly_chart(rectangular_tree_figure(st.session_state.tree),use_container_width=True,config={'displaylogo':False,'scrollZoom':True})
+                    tree_layout = st.segmented_control('Tree layout', options=['Radial garden','Rectangular'], default='Radial garden', key='tree_layout')
+                    tree_fig = radial_tree_figure(st.session_state.tree) if tree_layout == 'Radial garden' else rectangular_tree_figure(st.session_state.tree)
+                    st.plotly_chart(tree_fig,use_container_width=True,config={'displaylogo':False,'scrollZoom':True})
                     st.caption('Scroll to zoom • Drag to pan • Double-click to reset. Branch lengths represent estimated sequence change, not time.')
                     support = st.session_state.bootstrap_support
                     if support:
@@ -469,17 +545,34 @@ elif page == 'Understand My Tree':
         st.warning('Interpretation is limited to the input sequences and the method. The tree does not prove direct ancestry, and this version does not calculate bootstrap confidence.')
 
 elif page == 'Sequence Similarity':
-    st.markdown('<div class="pv-title">Sequence Similarity</div><div class="pv-muted">Compare pairs of sequences and see how observed identity relates to their differences.</div>',unsafe_allow_html=True)
+    st.markdown('<div class="pv-kicker">COMPARE · QUANTIFY · EXPORT</div><div class="pv-title">Sequence similarity</div><div class="pv-muted">Pairwise identity across comparable alignment positions. This view is independent of whether a tree has already been built.</div>',unsafe_allow_html=True)
     try:
-        records=current_records(); df=make_distance_matrix(records); sim=(1-df)*100; np.fill_diagonal(sim.values,100)
-        fig=go.Figure(data=go.Heatmap(z=sim.values,x=sim.columns,y=sim.index,colorscale=[[0,'#26294b'],[.5,'#8369be'],[1,'#75d4ba']],zmin=0,zmax=100,colorbar=dict(title='Identity %',tickfont=dict(color='#e8e5ff')),hovertemplate='%{y} vs %{x}<br>Identity: %{z:.2f}%<extra></extra>'))
-        fig.update_layout(height=max(400,len(records)*44),margin=dict(l=10,r=10,t=15,b=10),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(color='#f2efff',size=11),xaxis=dict(tickangle=-35),yaxis=dict(autorange='reversed'))
-        st.plotly_chart(fig,use_container_width=True,config={'displaylogo':False})
-        st.markdown('<div class="pv-card"><div class="pv-section">What does this mean?</div><p>Pairwise identity is the percentage of compared, non-gap positions that match. Higher identity means fewer observed differences across those positions. This is a simple descriptive measure; it is not itself a complete evolutionary model.</p><p class="pv-muted">Gaps and ambiguous characters are excluded from each pairwise comparison. The displayed identity is not a bootstrap confidence score.</p></div>',unsafe_allow_html=True)
-        out=sim.round(2).to_csv(index=True)
-        st.download_button('Download similarity matrix (CSV)',out,file_name='phylovision_similarity.csv',mime='text/csv')
-        st.dataframe(sim.round(2).style.format('{:.2f}%'),use_container_width=True)
-    except Exception as e: st.warning(str(e))
+        records = current_records()
+        sim = make_similarity_matrix(records)
+        finite = sim.to_numpy()[np.isfinite(sim.to_numpy())]
+        if len(finite) == 0:
+            st.warning('No comparable positions were found. Check that the sequences contain valid, non-ambiguous residues.')
+        else:
+            upper = sim.where(np.triu(np.ones(sim.shape), k=1).astype(bool))
+            pair_values = upper.stack().dropna()
+            if len(pair_values):
+                st.metric('Sequence pairs compared', len(pair_values))
+                st.caption(f'{len(records)} sequences · Identity excludes gaps and ambiguous/missing symbols (-, ?, ., N, X).')
+            fig = go.Figure(data=go.Heatmap(z=sim.values, x=sim.columns, y=sim.index,
+                colorscale=[[0,'#3b5148'],[.5,'#8cae91'],[1,'#d9e8bf']], zmin=0,zmax=100,connectgaps=False,
+                colorbar=dict(title='Identity %',tickfont=dict(color='#dfe7d9'),outlinewidth=0),
+                hovertemplate='%{y} vs %{x}<br>Identity: %{z:.2f}%<extra></extra>',
+                text=np.where(np.isfinite(sim.values), np.vectorize(lambda v: f'{v:.1f}%' if np.isfinite(v) else 'No data')(sim.values), 'No data'),
+                texttemplate='%{text}', textfont=dict(color='#17211b',size=11)))
+            fig.update_layout(height=max(360,len(records)*54),margin=dict(l=10,r=18,t=12,b=75),paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',font=dict(color='#e9eee5',size=11),xaxis=dict(tickangle=-35,side='bottom'),yaxis=dict(autorange='reversed'))
+            st.plotly_chart(fig,use_container_width=True,config={'displaylogo':False})
+            with st.expander('Inspect pairwise identity values', expanded=True):
+                st.dataframe(sim.style.format('{:.2f}%',na_rep='No comparable sites'),use_container_width=True)
+            out=sim.to_csv(index=True,na_rep='')
+            st.download_button('Export similarity matrix · CSV',out,file_name='phylovision_similarity.csv',mime='text/csv')
+            st.markdown('<div class="pv-card"><div class="pv-section">How to read this</div><div class="pv-muted">100% means all comparable positions match; lower values indicate more observed differences. “No comparable sites” means every position in that pair was excluded. Identity is descriptive, not a probability of common ancestry or a bootstrap score.</div></div>',unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f'Could not calculate sequence similarity: {e}')
 
 else: # Creators & About
     st.markdown('<div class="pv-title">Creators & About</div><div class="pv-muted">The people and purpose behind PhyloVision.</div>',unsafe_allow_html=True)
