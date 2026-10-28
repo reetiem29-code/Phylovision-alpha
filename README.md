@@ -1,17 +1,17 @@
-# PhyloVision — Botanical Bioinformatics
+# PhyloVision — From Sequences to Evolution
 
-PhyloVision is a Streamlit learning workspace for sequence input, NCBI accession-to-FASTA retrieval, alignment inspection, sequence similarity, and phylogenetic tree exploration.
+PhyloVision is a student-friendly Streamlit workspace for sequence input, NCBI accession-to-FASTA retrieval, alignment inspection, pairwise sequence identity, distance-based phylogenetic trees, and plain-language interpretation.
 
-## Menu update
+## What is included
 
-This version preserves the existing analysis modules and adds a guided-lab menu plus compact direct-access tool dock:
-
-- **Guided Lab:** beginner-friendly steps for preparing sequences, optional accession retrieval, inspecting alignment, building a tree, and exploring findings.
-- **Tool Dock:** direct access to modules for experienced users.
-- **Quick Action Search:** search tool names and task descriptions, then jump to a matching module.
-- **Collapsible sidebar:** use Streamlit's native sidebar collapse/expand control; no custom JavaScript is needed.
-- **Readiness indicators:** session-based milestones for sequence input, alignment availability, and tree construction. These indicate workflow state, not biological validity.
-- **Visual refinement:** restrained botanical palette, clearer labels, compact navigation buttons, and breathable spacing.
+- **Consistent light theme:** lavender/purple accents, readable widget labels, visible primary actions, and white Plotly chart templates.
+- **Guided Lab + Tool Dock:** a step-by-step beginner route, direct tool access, and Quick Action Search in one navigation system.
+- **Sequence Input:** FASTA upload/paste with immediate validation feedback, plus a prominent plant teaching-example action.
+- **Accession → FASTA:** fetch NCBI nucleotide or protein records, preview and download FASTA, then import directly into Sequence Input. The contact email is kept only in the active Streamlit session.
+- **Alignment Explorer:** 60-position blocks, colour-blind-friendly nucleotide colours, conservation markers, and a consensus row.
+- **Sequence Similarity:** pairwise identity heatmap with a data-adaptive colour range, mean/minimum/maximum identity, most/least similar pairs, tie reporting, and CSV export.
+- **Phylogenetic Tree:** Neighbor Joining or UPGMA, rectangular/radial layouts, Newick export, PDF report, and optional column-resampling bootstrap support (100 replicates by default).
+- **Progress:** reflects whether input exists, sequences have equal length for the alignment-based tools, and a tree exists for the current input.
 
 ## Run locally
 
@@ -20,21 +20,30 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Deploy on Streamlit Community Cloud
+The theme is configured in `.streamlit/config.toml`.
 
-Commit the updated `app.py`, `README.md`, and `requirements.txt` to the **same GitHub repository** used by the existing app. Streamlit Community Cloud should rebuild the existing deployment after the commit. This archive does not itself update the live website.
+## Deploy to Streamlit Community Cloud
 
-## Scientific notes
+Upload/commit the contents of this folder to the same GitHub repository used by the existing app. Keep `app.py` at the repository root (or update the Streamlit entry-point setting if you choose a different layout). Streamlit Community Cloud should rebuild after the commit. This ZIP does not update the live deployment by itself.
 
-- Accession retrieval fetches records; it does not by itself perform multiple sequence alignment.
-- Confirm that sequences are appropriate and aligned before building a phylogenetic tree.
-- The included demo sequences are illustrative teaching data, not verified reference sequences.
-- Results depend on input quality and the selected method.
+## Plant teaching dataset and provenance
 
+The teaching examples fetch real marker records from NCBI at runtime. Choose either plant **rbcL** or mammalian mitochondrial **COI**:
 
-## Accession → FASTA
-Fetch nucleotide or protein records from NCBI using accession codes, preview the returned FASTA, and download or import records into the existing workflow. Retrieved sequences may still need multiple sequence alignment before tree construction.
+- *Arabidopsis thaliana* — [AY174633.1](https://www.ncbi.nlm.nih.gov/nuccore/AY174633.1)
+- *Aethionema grandiflora* — [AY167983.1](https://www.ncbi.nlm.nih.gov/nuccore/AY167983.1)
+- *Arabis glabra* — [DQ310542.1](https://www.ncbi.nlm.nih.gov/nuccore/DQ310542.1)
+- *Berteroa incana* — [KM360667.1](https://www.ncbi.nlm.nih.gov/nuccore/KM360667.1)
+- *Anchonium elichrysifolium* — [FN594834.1](https://www.ncbi.nlm.nih.gov/nuccore/FN594834.1)
 
+The five plant accessions are drawn from the published Brassicaceae rbcL barcode dataset in [Decision Tree Algorithm–Generated Single-Nucleotide Polymorphism Barcodes of rbcL Genes for 38 Brassicaceae Species Tagging](https://pmc.ncbi.nlm.nih.gov/articles/PMC5846911/). The mammal example fetches mitochondrial RefSeq records and extracts a 450-nt COI region using the annotated coordinates listed by NCBI: [human NC_012920.1](https://www.ncbi.nlm.nih.gov/gene/004512), [chimpanzee NC_001643.1](https://www.ncbi.nlm.nih.gov/gene/807866), [gorilla NC_011120.1](https://www.ncbi.nlm.nih.gov/gene/6742689), [mouse NC_005089.1](https://www.ncbi.nlm.nih.gov/gene/17708), and [rat NC_001665.2](https://www.ncbi.nlm.nih.gov/gene/26195). The app fetches the actual records, aligns them to a common reference region using a teaching-grade star alignment, and retains the first 450 reference positions (plus any insertion columns). This is provided for classroom exploration, not as a substitute for a curated MAFFT/MUSCLE alignment or expert review. The accessions and retrieval method are visible in the app.
 
-## Interface guide
-The Home page includes a short tool guide and navigation paths. Use Guided Lab for a step-by-step route, Tool Dock for direct access, and Quick Action Search to find modules. The interface uses a subtle lavender, purple, and white palette.
+## Scientific notes and limitations
+
+- NCBI retrieval does **not** automatically align arbitrary records. User-supplied sequences must already be aligned and equal length before alignment-dependent tree analysis.
+- The plant rbcL and mammal COI examples are transparent, reproducible convenience workflows; inspect the alignment and data provenance before interpreting the tree.
+- Pairwise identity excludes gaps and ambiguous/missing symbols from the comparable-position denominator.
+- The tree uses an identity-based distance calculation (uncorrected p-distance). UPGMA assumes a constant evolutionary rate; Neighbor Joining does not impose that clock assumption.
+- Bootstrap percentages are calculated only when enabled by column resampling. They indicate how often a split recurs under that procedure; they are not the probability that a clade is true.
+- Equal sequence lengths do not prove biological homology or a correct alignment. Document accession IDs, marker, alignment method, and settings for research work.
+- NCBI fetching requires internet access from the running app and may be affected by temporary service limits.
